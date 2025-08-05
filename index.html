@@ -1,14 +1,105 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href='style.css'>
-    <title>Título</title>
-</head>
-<body>
-    
-    
-   <script src='script.js'></script>
-</body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="style.css" />
+        <link
+            href="https://fonts.googleapis.com/css?family=Montserrat:100,200,300,regular,500,600,700,800,900,100italic,200italic,300italic,italic,500italic,600italic,700italic,800italic,900italic"
+            rel="stylesheet"
+        />
+        <script src="script.js" defer></script>
+        <title>Mis Datos</title>
+    </head>
+    <body>
+        <nav id="navbar">
+            <img id="foto" src="asset/perfil.png" alt="Foto de perfil" />
+
+            <div class="carousel-container">
+                <div class="carousel">
+                    <div class="carousel-item active">
+                        <h3>Nombre:</h3>
+                        <h1>Abel Nephtali<br />Vasquez Brena</h1>
+                    </div>
+                    <div class="carousel-item">
+                        <h3>Fecha de nacimiento:</h3>
+                        <h1>7 de Abril<br />del 2007</h1>
+                    </div>
+                    <div class="carousel-item">
+                        <h3>Numero de telefono:</h3>
+                        <h1>565-520-69-97</h1>
+                    </div>
+                </div>
+
+                <div class="carousel-nav">
+                    <button class="prev-btn" onclick="previousSlide()">
+                        &#8249;
+                    </button>
+                    <div class="carousel-indicators">
+                        <span
+                            class="indicator active"
+                            onclick="currentSlide(1)"
+                        ></span>
+                        <span
+                            class="indicator"
+                            onclick="currentSlide(2)"
+                        ></span>
+                        <span
+                            class="indicator"
+                            onclick="currentSlide(3)"
+                        ></span>
+                    </div>
+                    <button class="next-btn" onclick="nextSlideManual()">
+                        &#8250;
+                    </button>
+                </div>
+            </div>
+
+            <button class="down-arrow-btn" onclick="toggleSection()">
+                &#8595;
+            </button>
+        </nav>
+
+        <section id="personal-data" class="personal-section">
+            <div class="section-content">
+                <button class="up-arrow-btn" onclick="toggleSection()">
+                    &#8593;
+                </button>
+
+                <h2>Datos Personales</h2>
+
+                <div class="data-grid">
+                    <div class="data-item">
+                        <h3>Edad</h3>
+                        <p>18 años</p>
+                    </div>
+
+                    <div class="data-item">
+                        <h3>Lugar de nacimiento</h3>
+                        <p>México</p>
+                    </div>
+
+                    <div class="data-item">
+                        <h3>Estado civil</h3>
+                        <p>Soltero</p>
+                    </div>
+
+                    <div class="data-item">
+                        <h3>Ocupación</h3>
+                        <p>Estudiante</p>
+                    </div>
+
+                    <div class="data-item">
+                        <h3>Email</h3>
+                        <p>abel.vasquez@email.com</p>
+                    </div>
+
+                    <div class="data-item">
+                        <h3>Dirección</h3>
+                        <p>Ciudad de México, México</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </body>
 </html>
