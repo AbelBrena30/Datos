@@ -326,3 +326,92 @@ body {
     background: rgba(255, 255, 255, 0.7);
     transform: scale(1.1);
 }
+
+@media (max-width: 768px) {
+    .section-content h2 {
+        font-size: 2rem;
+        margin-bottom: 30px;
+    }
+
+    .data-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        margin-top: 30px;
+    }
+
+    .data-item h3 {
+        font-size: 1.2rem;
+    }
+
+    .data-item p {
+        font-size: 1rem;
+    }
+
+    .carousel-item {
+        width: 280px;
+    }
+
+    .carousel-item h1 {
+        font-size: 28px;
+    }
+
+    .carousel-item.prev h1,
+    .carousel-item.next h1 {
+        font-size: 22px;
+    }
+
+    .carousel-item h3 {
+        font-size: 16px;
+    }
+
+    .carousel-item.prev h3,
+    .carousel-item.next h3 {
+        font-size: 12px;
+    }
+
+    .prev-btn,
+    .next-btn {
+        width: 45px;
+        height: 45px;
+        font-size: 20px;
+        margin: 10px;
+    }
+
+    .down-arrow-btn {
+        width: 45px;
+        height: 45px;
+        font-size: 18px;
+    }
+
+    #foto {
+        height: 60px;
+        width: 60px;
+        border-width: 3px;
+    }
+
+    .up-arrow-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+        top: 10px;
+        right: 10px;
+    }
+
+    .carousel-container {
+        padding-bottom: 30px;
+    }
+
+    .carousel-indicators {
+        bottom: -30px;
+        gap: 8px;
+    }
+
+    .indicator {
+        width: 10px;
+        height: 10px;
+    }
+
+    .personal-section {
+        padding: 20px 15px;
+    }
+}
