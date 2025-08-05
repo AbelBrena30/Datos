@@ -5,6 +5,18 @@ let userData = {};
 let isLoadingData = false;
 let isGitHubPagesMode = true; // Siempre en modo GitHub Pages
 
+// Google Drive API configuration
+const GOOGLE_DRIVE_CONFIG = {
+    CLIENT_ID:
+        "1087207166556-9o8mgr8b1j4o8b3oh8h9r9q1q9q1q9q1.apps.googleusercontent.com", // Necesitas crear tu propio Client ID
+    API_KEY: "AIzaSyDxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx", // Necesitas crear tu propia API Key
+    DISCOVERY_DOC: "https://www.googleapis.com/discovery/v1/apis/drive/v3/rest",
+    SCOPES: "https://www.googleapis.com/auth/drive.file",
+};
+
+let gapi_loaded = false;
+let google_drive_authorized = false;
+
 let currentIndex = 0;
 const items = document.querySelectorAll(".carousel-item");
 const indicators = document.querySelectorAll(".indicator");
@@ -81,25 +93,189 @@ function downloadUserDataTXT(username) {
     txtContent += `Este archivo fue generado automáticamente por el sistema\n`;
     txtContent += `de gestión de datos personales.`;
 
-    // Crear y descargar el archivo
+    const fileName = `datos_${username || "usuario"}_${new Date()
+        .toISOString()
+        .slice(0, 10)}.txt`;
+
+    // Intentar guardar en Google Drive automáticamente
+    saveToGoogleDriveOrLocal(txtContent, fileName);
+}
+
+// Función para guardar en Google Drive o localmente como fallback
+async function saveToGoogleDriveOrLocal(txtContent, fileName) {
+    try {
+        // Verificar si Google Drive está disponible y autorizado
+        if (window.gapi && gapi.auth2) {
+            const authInstance = gapi.auth2.getAuthInstance();
+            if (authInstance && authInstance.isSignedIn.get()) {
+                console.log("Guardando en Google Drive...");
+                await uploadToGoogleDrive(txtContent, fileName);
+                showMessage(
+                    `☁️ Archivo guardado en Google Drive: ${fileName}`,
+                    "success"
+                );
+                return;
+            }
+        }
+
+        // Si Google Drive no está disponible, guardar localmente
+        console.log("Google Drive no disponible, descargando localmente...");
+        downloadFileLocally(txtContent, fileName);
+    } catch (error) {
+        console.log("Error guardando en Google Drive:", error);
+        // Fallback a descarga local
+        downloadFileLocally(txtContent, fileName);
+    }
+}
+
+// Función para descargar archivo localmente (método original)
+function downloadFileLocally(txtContent, fileName) {
     const blob = new Blob([txtContent], { type: "text/plain;charset=utf-8" });
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `datos_${username || "usuario"}_${new Date()
-        .toISOString()
-        .slice(0, 10)}.txt`;
+    link.download = fileName;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
     window.URL.revokeObjectURL(url);
 
-    showMessage(
-        `📄 Archivo descargado: datos_${username || "usuario"}_${new Date()
-            .toISOString()
-            .slice(0, 10)}.txt`,
-        "success"
-    );
+    showMessage(`📄 Archivo descargado: ${fileName}`, "success");
+}
+
+// Inicializar Google Drive API automáticamente
+async function initializeGoogleDrive() {
+    try {
+        console.log("Inicializando Google Drive API...");
+
+        if (!window.gapi) {
+            console.log("Cargando Google API...");
+            await loadGoogleAPI();
+        }
+
+        await new Promise((resolve) => {
+            gapi.load("auth2", resolve);
+        });
+
+        await gapi.auth2.init({
+            client_id: GOOGLE_DRIVE_CONFIG.CLIENT_ID,
+        });
+
+        const authInstance = gapi.auth2.getAuthInstance();
+
+        // Intentar autenticación silenciosa primero
+        let isSignedIn = authInstance.isSignedIn.get();
+
+        if (!isSignedIn) {
+            console.log("Autenticando con Google Drive...");
+            try {
+                await authInstance.signIn({ prompt: "none" }); // Intento silencioso
+            } catch (error) {
+                // Si falla el intento silencioso, hacer login normal
+                await authInstance.signIn();
+            }
+        }
+
+        console.log("✅ Google Drive conectado exitosamente");
+        showMessage("☁️ Google Drive conectado", "success");
+        return true;
+
+        google_drive_authorized = true;
+        showMessage("✅ Conectado a Google Drive", "success");
+    } catch (error) {
+        console.error("Error al inicializar Google Drive:", error);
+        showMessage("❌ Error al conectar con Google Drive", "error");
+        google_drive_authorized = false;
+    }
+}
+
+// Cargar Google API
+function loadGoogleAPI() {
+    return new Promise((resolve, reject) => {
+        if (typeof gapi !== "undefined") {
+            gapi_loaded = true;
+            resolve();
+            return;
+        }
+
+        const script = document.createElement("script");
+        script.src = "https://apis.google.com/js/api.js";
+        script.onload = () => {
+            gapi.load("client:auth2", async () => {
+                try {
+                    await gapi.client.init({
+                        apiKey: GOOGLE_DRIVE_CONFIG.API_KEY,
+                        clientId: GOOGLE_DRIVE_CONFIG.CLIENT_ID,
+                        discoveryDocs: [GOOGLE_DRIVE_CONFIG.DISCOVERY_DOC],
+                        scope: GOOGLE_DRIVE_CONFIG.SCOPES,
+                    });
+                    gapi_loaded = true;
+                    resolve();
+                } catch (error) {
+                    reject(error);
+                }
+            });
+        };
+        script.onerror = reject;
+        document.head.appendChild(script);
+    });
+}
+
+// Subir archivo a Google Drive
+async function uploadToGoogleDrive(content, fileName) {
+    try {
+        showMessage("☁️ Subiendo archivo a Google Drive...", "success");
+
+        const boundary = "-------314159265358979323846";
+        const delimiter = "\r\n--" + boundary + "\r\n";
+        const close_delim = "\r\n--" + boundary + "--";
+
+        const metadata = {
+            name: fileName,
+            parents: [], // Se guardará en la raíz de Drive
+        };
+
+        const multipartRequestBody =
+            delimiter +
+            "Content-Type: application/json\r\n\r\n" +
+            JSON.stringify(metadata) +
+            delimiter +
+            "Content-Type: text/plain\r\n\r\n" +
+            content +
+            close_delim;
+
+        const request = gapi.client.request({
+            path: "https://www.googleapis.com/upload/drive/v3/files",
+            method: "POST",
+            params: { uploadType: "multipart" },
+            headers: {
+                "Content-Type":
+                    'multipart/related; boundary="' + boundary + '"',
+            },
+            body: multipartRequestBody,
+        });
+
+        const response = await request;
+
+        if (response.status === 200) {
+            showMessage(
+                "✅ Archivo guardado en Google Drive exitosamente",
+                "success"
+            );
+
+            // También descargar localmente como respaldo
+            downloadFileLocally(content, fileName);
+        } else {
+            throw new Error("Error al subir archivo");
+        }
+    } catch (error) {
+        console.error("Error al subir a Google Drive:", error);
+        showMessage(
+            "❌ Error al guardar en Google Drive. Descargando localmente...",
+            "error"
+        );
+        downloadFileLocally(content, fileName);
+    }
 }
 
 // Función para cerrar sesión
@@ -163,7 +339,7 @@ function initializeStaticMode() {
     }, 100);
 }
 
-// Modo Netlify (con datos locales persistentes)
+// Modo GitHub Pages (con datos locales persistentes y Google Drive)
 function initializeGitHubPagesMode() {
     console.log("Inicializando modo GitHub Pages");
 
@@ -184,6 +360,17 @@ function initializeGitHubPagesMode() {
     if (savedUser) {
         updateUserMenu(savedUser);
     }
+
+    // Inicializar Google Drive automáticamente después de cargar todo
+    setTimeout(() => {
+        initializeGoogleDrive().catch((error) => {
+            console.log("Google Drive no disponible:", error);
+            showMessage(
+                "⚠️ Google Drive no conectado - usando solo descarga local",
+                "error"
+            );
+        });
+    }, 2000);
 }
 
 // Cargar datos locales guardados
@@ -420,7 +607,18 @@ function formatDate(dateString) {
 // Función para cerrar sesión
 function logout() {
     if (confirm("¿Estás seguro que deseas cerrar sesión?")) {
-        localStorage.removeItem("token");
+        // Limpiar toda la sesión y caché
+        localStorage.clear();
+        sessionStorage.clear();
+
+        // Limpiar caché del navegador si es posible
+        if ("caches" in window) {
+            caches.keys().then(function (names) {
+                for (let name of names) caches.delete(name);
+            });
+        }
+
+        // Redirigir a login
         window.location.href = "index.html";
     }
 }
@@ -434,6 +632,36 @@ function downloadMyData() {
     } else {
         showMessage("❌ No se pudo identificar el usuario", "error");
     }
+}
+
+// Función para conectar/desconectar Google Drive
+async function toggleGoogleDrive() {
+    const driveBtn = document.getElementById("driveBtn");
+
+    if (google_drive_authorized) {
+        // Desconectar
+        try {
+            const authInstance = gapi.auth2.getAuthInstance();
+            await authInstance.signOut();
+            google_drive_authorized = false;
+            driveBtn.innerHTML = "☁️ Conectar Google Drive";
+            showMessage("🔌 Desconectado de Google Drive", "success");
+        } catch (error) {
+            showMessage("❌ Error al desconectar", "error");
+        }
+    } else {
+        // Conectar
+        try {
+            await initializeGoogleDrive();
+            if (google_drive_authorized) {
+                driveBtn.innerHTML = "☁️ Desconectar Google Drive";
+            }
+        } catch (error) {
+            showMessage("❌ Error al conectar con Google Drive", "error");
+        }
+    }
+
+    toggleUserMenu(); // Cerrar el menú
 }
 
 // Función para toggle del menú de usuario
