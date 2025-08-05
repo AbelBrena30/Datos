@@ -3,9 +3,7 @@ const API_BASE = "http://localhost:3000/api"; // Solo para desarrollo local
 let authToken = localStorage.getItem("token");
 let userData = {};
 let isLoadingData = false;
-let isNetlifyMode =
-    window.location.hostname !== "localhost" &&
-    window.location.hostname !== "127.0.0.1"; // Detectar automáticamente
+let isGitHubPagesMode = true; // Siempre en modo GitHub Pages
 
 let currentIndex = 0;
 const items = document.querySelectorAll(".carousel-item");
@@ -33,9 +31,9 @@ document.addEventListener("DOMContentLoaded", function () {
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
 
-    // En Netlify, siempre usar modo estático con datos locales
-    if (isNetlifyMode) {
-        initializeNetlifyMode();
+    // En GitHub Pages, siempre usar modo estático con datos locales
+    if (isGitHubPagesMode) {
+        initializeGitHubPagesMode();
         return;
     }
 
@@ -75,8 +73,8 @@ function initializeStaticMode() {
 }
 
 // Modo Netlify (con datos locales persistentes)
-function initializeNetlifyMode() {
-    console.log("Inicializando modo Netlify");
+function initializeGitHubPagesMode() {
+    console.log("Inicializando modo GitHub Pages");
 
     // Cargar datos guardados localmente
     loadLocalData();
