@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Iniciar Sesión - Datos Personales</title>
+        <link rel="stylesheet" href="login.css" />
+        <link
+            href="https://fonts.googleapis.com/css?family=Montserrat:100,200,300,regular,500,600,700,800,900"
+            rel="stylesheet"
+        />
+    </head>
+    <body>
+        <div class="auth-container">
+            <div class="auth-card">
+                <div class="auth-header">
+                    <h1>Datos Personales</h1>
+                    <p>Gestiona tu información personal de forma segura</p>
+                </div>
+
+                <!-- Formulario de Login -->
+                <div id="login-form" class="auth-form active">
+                    <h2>Iniciar Sesión</h2>
+                    <form id="loginForm">
+                        <div class="input-group">
+                            <label for="loginUsername">Usuario</label>
+                            <input
+                                type="text"
+                                id="loginUsername"
+                                name="username"
+                                required
+                            />
+                        </div>
+                        <div class="input-group">
+                            <label for="loginPassword">Contraseña</label>
+                            <input
+                                type="password"
+                                id="loginPassword"
+                                name="password"
+                                required
+                            />
+                        </div>
+                        <button type="submit" class="auth-btn">
+                            Iniciar Sesión
+                        </button>
+                    </form>
+                    <p class="auth-switch">
+                        ¿No tienes cuenta?
+                        <a href="#" onclick="switchToRegister()"
+                            >Regístrate aquí</a
+                        >
+                    </p>
+                </div>
+
+                <!-- Formulario de Registro -->
+                <div id="register-form" class="auth-form">
+                    <h2>Crear Cuenta</h2>
+                    <form id="registerForm">
+                        <div class="input-group">
+                            <label for="registerUsername">Usuario</label>
+                            <input
+                                type="text"
+                                id="registerUsername"
+                                name="username"
+                                required
+                            />
+                        </div>
+                        <div class="input-group">
+                            <label for="registerEmail">Email</label>
+                            <input
+                                type="email"
+                                id="registerEmail"
+                                name="email"
+                                required
+                            />
+                        </div>
+                        <div class="input-group">
+                            <label for="registerPassword">Contraseña</label>
+                            <input
+                                type="password"
+                                id="registerPassword"
+                                name="password"
+                                required
+                            />
+                        </div>
+                        <div class="input-group">
+                            <label for="confirmPassword"
+                                >Confirmar Contraseña</label
+                            >
+                            <input
+                                type="password"
+                                id="confirmPassword"
+                                name="confirmPassword"
+                                required
+                            />
+                        </div>
+                        <button type="submit" class="auth-btn">
+                            Crear Cuenta
+                        </button>
+                    </form>
+                    <p class="auth-switch">
+                        ¿Ya tienes cuenta?
+                        <a href="#" onclick="switchToLogin()"
+                            >Inicia sesión aquí</a
+                        >
+                    </p>
+                </div>
+
+                <!-- Mensaje de error/éxito -->
+                <div id="message" class="message"></div>
+            </div>
+
+            <!-- Formulario de datos iniciales (para nuevos usuarios) -->
+            <div id="initial-data-form" class="initial-form hidden">
+                <div class="form-card">
+                    <h2>¡Bienvenido! Completa tu información</h2>
+                    <p>
+                        Como nuevo usuario, necesitamos que completes tus datos
+                        personales
+                    </p>
+
+                    <form id="initialDataForm">
+                        <div class="form-section">
+                            <h3>Datos Personales</h3>
+                            <div class="input-row">
+                                <div class="input-group">
+                                    <label for="nombre">Nombre Completo</label>
+                                    <input
+                                        type="text"
+                                        id="nombre"
+                                        name="nombre"
+                                        required
+                                    />
+                                </div>
+                                <div class="input-group">
+                                    <label for="fecha_nacimiento"
+                                        >Fecha de Nacimiento</label
+                                    >
+                                    <input
+                                        type="date"
+                                        id="fecha_nacimiento"
+                                        name="fecha_nacimiento"
+                                        required
+                                    />
+                                </div>
+                            </div>
+                            <div class="input-row">
+                                <div class="input-group">
+                                    <label for="edad">Edad</label>
+                                    <input
+                                        type="number"
+                                        id="edad"
+                                        name="edad"
+                                        required
+                                    />
+                                </div>
+                                <div class="input-group">
+                                    <label for="lugar_nacimiento"
+                                        >Lugar de Nacimiento</label
+                                    >
+                                    <input
+                                        type="text"
+                                        id="lugar_nacimiento"
+                                        name="lugar_nacimiento"
+                                        required
+                                    />
+                                </div>
+                            </div>
+                            <div class="input-row">
+                                <div class="input-group">
+                                    <label for="ocupacion">Ocupación</label>
+                                    <input
+                                        type="text"
+                                        id="ocupacion"
+                                        name="ocupacion"
+                                        required
+                                    />
+                                </div>
+                                <div class="input-group">
+                                    <label for="escuela"
+                                        >Escuela/Universidad</label
+                                    >
+                                    <input
+                                        type="text"
+                                        id="escuela"
+                                        name="escuela"
+                                    />
+                                </div>
+                            </div>
+                            <div class="input-row">
+                                <div class="input-group">
+                                    <label for="email_personal"
+                                        >Email Personal</label
+                                    >
+                                    <input
+                                        type="email"
+                                        id="email_personal"
+                                        name="email"
+                                        required
+                                    />
+                                </div>
+                                <div class="input-group">
+                                    <label for="numero"
+                                        >Número de Teléfono</label
+                                    >
+                                    <input
+                                        type="tel"
+                                        id="numero"
+                                        name="numero"
+                                        required
+                                    />
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label for="direccion">Dirección</label>
+                                <textarea
+                                    id="direccion"
+                                    name="direccion"
+                                    rows="2"
+                                    required
+                                ></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h3>Datos de los Padres</h3>
+                            <div class="parents-container">
+                                <div class="parent-form">
+                                    <h4>Padre</h4>
+                                    <div class="input-group">
+                                        <label for="padre_nombre">Nombre</label>
+                                        <input
+                                            type="text"
+                                            id="padre_nombre"
+                                            name="padre_nombre"
+                                        />
+                                    </div>
+                                    <div class="input-row">
+                                        <div class="input-group">
+                                            <label for="padre_edad">Edad</label>
+                                            <input
+                                                type="number"
+                                                id="padre_edad"
+                                                name="padre_edad"
+                                            />
+                                        </div>
+                                        <div class="input-group">
+                                            <label for="padre_ocupacion"
+                                                >Ocupación</label
+                                            >
+                                            <input
+                                                type="text"
+                                                id="padre_ocupacion"
+                                                name="padre_ocupacion"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div class="input-row">
+                                        <div class="input-group">
+                                            <label for="padre_lugar_nacimiento"
+                                                >Lugar de Nacimiento</label
+                                            >
+                                            <input
+                                                type="text"
+                                                id="padre_lugar_nacimiento"
+                                                name="padre_lugar_nacimiento"
+                                            />
+                                        </div>
+                                        <div class="input-group">
+                                            <label for="padre_numero"
+                                                >Teléfono</label
+                                            >
+                                            <input
+                                                type="tel"
+                                                id="padre_numero"
+                                                name="padre_numero"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="parent-form">
+                                    <h4>Madre</h4>
+                                    <div class="input-group">
+                                        <label for="madre_nombre">Nombre</label>
+                                        <input
+                                            type="text"
+                                            id="madre_nombre"
+                                            name="madre_nombre"
+                                        />
+                                    </div>
+                                    <div class="input-row">
+                                        <div class="input-group">
+                                            <label for="madre_edad">Edad</label>
+                                            <input
+                                                type="number"
+                                                id="madre_edad"
+                                                name="madre_edad"
+                                            />
+                                        </div>
+                                        <div class="input-group">
+                                            <label for="madre_ocupacion"
+                                                >Ocupación</label
+                                            >
+                                            <input
+                                                type="text"
+                                                id="madre_ocupacion"
+                                                name="madre_ocupacion"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div class="input-row">
+                                        <div class="input-group">
+                                            <label for="madre_lugar_nacimiento"
+                                                >Lugar de Nacimiento</label
+                                            >
+                                            <input
+                                                type="text"
+                                                id="madre_lugar_nacimiento"
+                                                name="madre_lugar_nacimiento"
+                                            />
+                                        </div>
+                                        <div class="input-group">
+                                            <label for="madre_numero"
+                                                >Teléfono</label
+                                            >
+                                            <input
+                                                type="tel"
+                                                id="madre_numero"
+                                                name="madre_numero"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button
+                                type="button"
+                                onclick="skipInitialData()"
+                                class="btn-secondary"
+                            >
+                                Completar Después
+                            </button>
+                            <button type="submit" class="auth-btn">
+                                Guardar y Continuar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <script src="auth.js"></script>
+    </body>
+</html>

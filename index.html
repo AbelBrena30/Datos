@@ -12,6 +12,24 @@
         <title>Mis Datos</title>
     </head>
     <body>
+        <!-- Menú de usuario -->
+        <div id="user-menu" class="user-menu">
+            <button class="user-menu-btn" onclick="toggleUserMenu()">
+                <span>👤</span>
+            </button>
+            <div class="user-menu-dropdown" id="userMenuDropdown">
+                <div class="user-info">
+                    <span id="currentUser">Usuario</span>
+                </div>
+                <button onclick="editProfile()" class="menu-item">
+                    ✏️ Editar Datos
+                </button>
+                <button onclick="logout()" class="menu-item logout">
+                    🚪 Cerrar Sesión
+                </button>
+            </div>
+        </div>
+
         <nav id="navbar">
             <img id="foto" src="asset/perfil.png" alt="Foto de perfil" />
 
