@@ -352,6 +352,22 @@
             </div>
         </div>
 
-        <script src="auth.js"></script>
+        <script>
+            // Detectar si estamos en Netlify y cargar el script apropiado
+            if (
+                window.location.hostname !== "localhost" &&
+                window.location.hostname !== "127.0.0.1"
+            ) {
+                // Estamos en Netlify
+                const script = document.createElement("script");
+                script.src = "auth-netlify.js";
+                document.head.appendChild(script);
+            } else {
+                // Estamos en desarrollo local
+                const script = document.createElement("script");
+                script.src = "auth.js";
+                document.head.appendChild(script);
+            }
+        </script>
     </body>
 </html>

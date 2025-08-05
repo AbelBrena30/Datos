@@ -1,0 +1,12 @@
+# Archivos de desarrollo local
+node_modules/
+datos.db
+server.js
+start-server.bat
+package.json
+package-lock.json
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+*.log

@@ -1,8 +1,11 @@
 // Variables de autenticación y datos
-const API_BASE = "http://localhost:3000/api";
+const API_BASE = "http://localhost:3000/api"; // Solo para desarrollo local
 let authToken = localStorage.getItem("token");
 let userData = {};
 let isLoadingData = false;
+let isNetlifyMode =
+    window.location.hostname !== "localhost" &&
+    window.location.hostname !== "127.0.0.1"; // Detectar automáticamente
 
 let currentIndex = 0;
 const items = document.querySelectorAll(".carousel-item");
@@ -30,6 +33,12 @@ document.addEventListener("DOMContentLoaded", function () {
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
 
+    // En Netlify, siempre usar modo estático con datos locales
+    if (isNetlifyMode) {
+        initializeNetlifyMode();
+        return;
+    }
+
     // Si no hay token, permitir modo estático pero mostrar mensaje
     if (!authToken) {
         console.log("No hay token de autenticación");
@@ -42,7 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Inicializar en modo estático por defecto
     initializeStaticMode();
-    
+
     // Si hay token, intentar cargar datos del servidor
     if (authToken && !isLoadingData) {
         console.log("Token encontrado, intentando conectar al servidor...");
@@ -63,6 +72,50 @@ function initializeStaticMode() {
     setTimeout(() => {
         addPhoneClickListeners();
     }, 100);
+}
+
+// Modo Netlify (con datos locales persistentes)
+function initializeNetlifyMode() {
+    console.log("Inicializando modo Netlify");
+
+    // Cargar datos guardados localmente
+    loadLocalData();
+
+    // Inicializar carrusel
+    showSlide(currentIndex);
+    startAutoSlide();
+
+    // Configurar listeners para números de teléfono
+    setTimeout(() => {
+        addPhoneClickListeners();
+    }, 100);
+
+    // Mostrar usuario en el menú
+    const savedUser = localStorage.getItem("current_user");
+    if (savedUser) {
+        updateUserMenu(savedUser);
+    }
+}
+
+// Cargar datos locales guardados
+function loadLocalData() {
+    try {
+        // Cargar datos personales
+        const personalData = localStorage.getItem("personal_data_local");
+        if (personalData) {
+            const data = JSON.parse(personalData);
+            updatePersonalDataUI(data);
+        }
+
+        // Cargar datos de padres
+        const parentsData = localStorage.getItem("parents_data_local");
+        if (parentsData) {
+            const data = JSON.parse(parentsData);
+            updateParentsDataUI(data);
+        }
+    } catch (error) {
+        console.log("Error cargando datos locales:", error);
+    }
 }
 
 // Cargar datos del usuario desde la base de datos
@@ -296,7 +349,7 @@ function editProfile() {
         window.location.href = "index.html";
         return;
     }
-    
+
     // Crear modal de edición
     createEditModal();
     toggleUserMenu();
@@ -305,16 +358,16 @@ function editProfile() {
 // Crear modal de edición de datos
 function createEditModal() {
     // Verificar si ya existe el modal
-    let modal = document.getElementById('editModal');
+    let modal = document.getElementById("editModal");
     if (modal) {
-        modal.style.display = 'flex';
+        modal.style.display = "flex";
         return;
     }
 
     // Crear modal
-    modal = document.createElement('div');
-    modal.id = 'editModal';
-    modal.className = 'edit-modal';
+    modal = document.createElement("div");
+    modal.id = "editModal";
+    modal.className = "edit-modal";
     modal.innerHTML = `
         <div class="modal-content">
             <div class="modal-header">
@@ -430,62 +483,76 @@ function createEditModal() {
     `;
 
     document.body.appendChild(modal);
-    
+
     // Cargar datos actuales en el formulario
     loadCurrentDataIntoForm();
     loadCurrentParentsDataIntoForm();
-    
+
     // Configurar eventos de envío
-    document.getElementById('editForm').addEventListener('submit', handleEditSubmit);
-    document.getElementById('editParentsForm').addEventListener('submit', handleParentsEditSubmit);
-    
+    document
+        .getElementById("editForm")
+        .addEventListener("submit", handleEditSubmit);
+    document
+        .getElementById("editParentsForm")
+        .addEventListener("submit", handleParentsEditSubmit);
+
     // Mostrar modal
-    modal.style.display = 'flex';
+    modal.style.display = "flex";
 }
 
 // Cargar datos actuales en el formulario de edición
 function loadCurrentDataIntoForm() {
     // Obtener datos actuales de la UI
     const dataItems = document.querySelectorAll("#personal-data .data-item");
-    
+
     dataItems.forEach((item) => {
         const label = item.querySelector("h3").textContent.toLowerCase();
         const value = item.querySelector("p").textContent;
-        
+
         switch (label) {
             case "nombre":
-                document.getElementById('editNombre').value = value !== "Tu Nombre Completo" ? value : "";
+                document.getElementById("editNombre").value =
+                    value !== "Tu Nombre Completo" ? value : "";
                 break;
             case "fecha de nacimiento":
                 if (value !== "DD/MM/AAAA") {
                     // Convertir DD/MM/AAAA a AAAA-MM-DD para el input date
-                    const parts = value.split('/');
+                    const parts = value.split("/");
                     if (parts.length === 3) {
-                        document.getElementById('editFechaNacimiento').value = `${parts[2]}-${parts[1]}-${parts[0]}`;
+                        document.getElementById(
+                            "editFechaNacimiento"
+                        ).value = `${parts[2]}-${parts[1]}-${parts[0]}`;
                     }
                 }
                 break;
             case "edad":
                 const edad = value.replace(" años", "");
-                document.getElementById('editEdad').value = edad !== "Tu edad" ? edad : "";
+                document.getElementById("editEdad").value =
+                    edad !== "Tu edad" ? edad : "";
                 break;
             case "lugar de nacimiento":
-                document.getElementById('editLugarNacimiento').value = value !== "Tu lugar de nacimiento" ? value : "";
+                document.getElementById("editLugarNacimiento").value =
+                    value !== "Tu lugar de nacimiento" ? value : "";
                 break;
             case "ocupación":
-                document.getElementById('editOcupacion').value = value !== "Tu ocupación" ? value : "";
+                document.getElementById("editOcupacion").value =
+                    value !== "Tu ocupación" ? value : "";
                 break;
             case "escuela":
-                document.getElementById('editEscuela').value = value !== "Tu escuela o institución" ? value : "";
+                document.getElementById("editEscuela").value =
+                    value !== "Tu escuela o institución" ? value : "";
                 break;
             case "email":
-                document.getElementById('editEmail').value = value !== "tu@email.com" ? value : "";
+                document.getElementById("editEmail").value =
+                    value !== "tu@email.com" ? value : "";
                 break;
             case "numero":
-                document.getElementById('editNumero').value = value !== "Tu número de teléfono" ? value : "";
+                document.getElementById("editNumero").value =
+                    value !== "Tu número de teléfono" ? value : "";
                 break;
             case "dirección":
-                document.getElementById('editDireccion').value = value !== "Tu dirección completa" ? value : "";
+                document.getElementById("editDireccion").value =
+                    value !== "Tu dirección completa" ? value : "";
                 break;
         }
     });
@@ -494,15 +561,19 @@ function loadCurrentDataIntoForm() {
 // Función para cambiar entre pestañas del modal
 function switchTab(tabName) {
     // Remover clase active de todos los botones y contenidos
-    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-    
+    document
+        .querySelectorAll(".tab-btn")
+        .forEach((btn) => btn.classList.remove("active"));
+    document
+        .querySelectorAll(".tab-content")
+        .forEach((content) => content.classList.remove("active"));
+
     // Activar el botón y contenido correspondiente
-    event.target.classList.add('active');
-    if (tabName === 'personal') {
-        document.getElementById('editForm').classList.add('active');
-    } else if (tabName === 'parents') {
-        document.getElementById('editParentsForm').classList.add('active');
+    event.target.classList.add("active");
+    if (tabName === "personal") {
+        document.getElementById("editForm").classList.add("active");
+    } else if (tabName === "parents") {
+        document.getElementById("editParentsForm").classList.add("active");
     }
 }
 
@@ -510,25 +581,49 @@ function switchTab(tabName) {
 function loadCurrentParentsDataIntoForm() {
     try {
         // Obtener datos del padre
-        const padreSection = document.querySelector(".parent-section:first-child .data-grid");
+        const padreSection = document.querySelector(
+            ".parent-section:first-child .data-grid"
+        );
         if (padreSection) {
             const padreData = extractParentData(padreSection);
-            document.getElementById('editPadreNombre').value = padreData.nombre !== "Nombre del padre" ? padreData.nombre : "";
-            document.getElementById('editPadreEdad').value = padreData.edad !== "Edad" ? padreData.edad : "";
-            document.getElementById('editPadreOcupacion').value = padreData.ocupacion !== "Ocupación" ? padreData.ocupacion : "";
-            document.getElementById('editPadreLugarNacimiento').value = padreData.lugar_nacimiento !== "Lugar de nacimiento" ? padreData.lugar_nacimiento : "";
-            document.getElementById('editPadreNumero').value = padreData.numero !== "Número de teléfono" ? padreData.numero : "";
+            document.getElementById("editPadreNombre").value =
+                padreData.nombre !== "Nombre del padre" ? padreData.nombre : "";
+            document.getElementById("editPadreEdad").value =
+                padreData.edad !== "Edad" ? padreData.edad : "";
+            document.getElementById("editPadreOcupacion").value =
+                padreData.ocupacion !== "Ocupación" ? padreData.ocupacion : "";
+            document.getElementById("editPadreLugarNacimiento").value =
+                padreData.lugar_nacimiento !== "Lugar de nacimiento"
+                    ? padreData.lugar_nacimiento
+                    : "";
+            document.getElementById("editPadreNumero").value =
+                padreData.numero !== "Número de teléfono"
+                    ? padreData.numero
+                    : "";
         }
 
         // Obtener datos de la madre
-        const madreSection = document.querySelector(".parent-section:last-child .data-grid");
+        const madreSection = document.querySelector(
+            ".parent-section:last-child .data-grid"
+        );
         if (madreSection) {
             const madreData = extractParentData(madreSection);
-            document.getElementById('editMadreNombre').value = madreData.nombre !== "Nombre de la madre" ? madreData.nombre : "";
-            document.getElementById('editMadreEdad').value = madreData.edad !== "Edad" ? madreData.edad : "";
-            document.getElementById('editMadreOcupacion').value = madreData.ocupacion !== "Ocupación" ? madreData.ocupacion : "";
-            document.getElementById('editMadreLugarNacimiento').value = madreData.lugar_nacimiento !== "Lugar de nacimiento" ? madreData.lugar_nacimiento : "";
-            document.getElementById('editMadreNumero').value = madreData.numero !== "Número de teléfono" ? madreData.numero : "";
+            document.getElementById("editMadreNombre").value =
+                madreData.nombre !== "Nombre de la madre"
+                    ? madreData.nombre
+                    : "";
+            document.getElementById("editMadreEdad").value =
+                madreData.edad !== "Edad" ? madreData.edad : "";
+            document.getElementById("editMadreOcupacion").value =
+                madreData.ocupacion !== "Ocupación" ? madreData.ocupacion : "";
+            document.getElementById("editMadreLugarNacimiento").value =
+                madreData.lugar_nacimiento !== "Lugar de nacimiento"
+                    ? madreData.lugar_nacimiento
+                    : "";
+            document.getElementById("editMadreNumero").value =
+                madreData.numero !== "Número de teléfono"
+                    ? madreData.numero
+                    : "";
         }
     } catch (error) {
         console.log("Error cargando datos de padres:", error);
@@ -539,11 +634,11 @@ function loadCurrentParentsDataIntoForm() {
 function extractParentData(section) {
     const data = {};
     const dataItems = section.querySelectorAll(".data-item");
-    
+
     dataItems.forEach((item) => {
         const label = item.querySelector("h3").textContent.toLowerCase();
         const value = item.querySelector("p").textContent;
-        
+
         switch (label) {
             case "nombre":
                 data.nombre = value;
@@ -562,133 +657,189 @@ function extractParentData(section) {
                 break;
         }
     });
-    
+
     return data;
 }
 
 // Manejar envío del formulario de edición de padres
 async function handleParentsEditSubmit(event) {
     event.preventDefault();
-    
+
     const form = event.target;
-    const submitBtn = form.querySelector('.save-btn');
+    const submitBtn = form.querySelector(".save-btn");
     const formData = new FormData(form);
     const data = {};
-    
+
     // Convertir FormData a objeto
     for (let [key, value] of formData.entries()) {
         data[key] = value;
     }
-    
+
     // Mostrar estado de carga
     submitBtn.disabled = true;
-    submitBtn.textContent = 'Guardando...';
-    submitBtn.classList.add('loading');
-    
+    submitBtn.textContent = "Guardando...";
+    submitBtn.classList.add("loading");
+
     try {
+        // En modo Netlify, guardar localmente
+        if (isNetlifyMode) {
+            localStorage.setItem("parents_data_local", JSON.stringify(data));
+            updateParentsDataUI(data);
+            showMessage("✅ Datos de padres guardados exitosamente", "success");
+            closeEditModal();
+
+            // Refrescar listeners de teléfonos
+            setTimeout(() => {
+                addPhoneClickListeners();
+            }, 100);
+            return;
+        }
+
+        // Modo servidor normal
         const response = await fetch(`${API_BASE}/parents-data`, {
-            method: 'PUT',
+            method: "PUT",
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${authToken}`
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${authToken}`,
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
         });
-        
+
         if (response.ok) {
             const updatedData = await response.json();
             updateParentsDataUI(updatedData);
-            showMessage("✅ Datos de padres actualizados exitosamente", "success");
+            showMessage(
+                "✅ Datos de padres actualizados exitosamente",
+                "success"
+            );
             closeEditModal();
-            
+
             // Refrescar listeners de teléfonos
             setTimeout(() => {
                 addPhoneClickListeners();
             }, 100);
         } else {
             const error = await response.json();
-            showMessage("❌ " + (error.error || "Error al actualizar datos de padres"), "error");
+            showMessage(
+                "❌ " + (error.error || "Error al actualizar datos de padres"),
+                "error"
+            );
         }
     } catch (error) {
         console.error("Error:", error);
-        showMessage("❌ Error de conexión al servidor", "error");
+        // Fallback a modo local si falla la conexión
+        localStorage.setItem("parents_data_local", JSON.stringify(data));
+        updateParentsDataUI(data);
+        showMessage(
+            "✅ Datos de padres guardados localmente (sin conexión)",
+            "success"
+        );
+        closeEditModal();
+
+        // Refrescar listeners de teléfonos
+        setTimeout(() => {
+            addPhoneClickListeners();
+        }, 100);
     } finally {
         submitBtn.disabled = false;
-        submitBtn.textContent = 'Guardar Cambios';
-        submitBtn.classList.remove('loading');
+        submitBtn.textContent = "Guardar Cambios";
+        submitBtn.classList.remove("loading");
     }
 }
 
 // Manejar envío del formulario de edición
 async function handleEditSubmit(event) {
     event.preventDefault();
-    
+
     const form = event.target;
-    const submitBtn = form.querySelector('.save-btn');
+    const submitBtn = form.querySelector(".save-btn");
     const formData = new FormData(form);
     const data = {};
-    
+
     // Convertir FormData a objeto
     for (let [key, value] of formData.entries()) {
         data[key] = value;
     }
-    
+
     // Mostrar estado de carga
     submitBtn.disabled = true;
-    submitBtn.textContent = 'Guardando...';
-    submitBtn.classList.add('loading');
-    
+    submitBtn.textContent = "Guardando...";
+    submitBtn.classList.add("loading");
+
     try {
+        // En modo Netlify, guardar localmente
+        if (isNetlifyMode) {
+            localStorage.setItem("personal_data_local", JSON.stringify(data));
+            updatePersonalDataUI(data);
+            showMessage(
+                "✅ Datos personales guardados exitosamente",
+                "success"
+            );
+            closeEditModal();
+            return;
+        }
+
+        // Modo servidor normal
         const response = await fetch(`${API_BASE}/personal-data`, {
-            method: 'PUT',
+            method: "PUT",
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${authToken}`
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${authToken}`,
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
         });
-        
+
         if (response.ok) {
             const updatedData = await response.json();
             updatePersonalDataUI(updatedData);
-            showMessage("✅ Datos personales actualizados exitosamente", "success");
+            showMessage(
+                "✅ Datos personales actualizados exitosamente",
+                "success"
+            );
             closeEditModal();
         } else {
             const error = await response.json();
-            showMessage("❌ " + (error.error || "Error al actualizar datos"), "error");
+            showMessage(
+                "❌ " + (error.error || "Error al actualizar datos"),
+                "error"
+            );
         }
     } catch (error) {
         console.error("Error:", error);
-        showMessage("❌ Error de conexión al servidor", "error");
+        // Fallback a modo local si falla la conexión
+        localStorage.setItem("personal_data_local", JSON.stringify(data));
+        updatePersonalDataUI(data);
+        showMessage("✅ Datos guardados localmente (sin conexión)", "success");
+        closeEditModal();
     } finally {
         submitBtn.disabled = false;
-        submitBtn.textContent = 'Guardar Cambios';
-        submitBtn.classList.remove('loading');
+        submitBtn.textContent = "Guardar Cambios";
+        submitBtn.classList.remove("loading");
     }
 }
 
 // Cerrar modal de edición
 function closeEditModal() {
-    const modal = document.getElementById('editModal');
+    const modal = document.getElementById("editModal");
     if (modal) {
-        modal.style.display = 'none';
+        modal.style.display = "none";
     }
 }
 
 // Función para mostrar mensajes
 function showMessage(message, type) {
-    const messageDiv = document.createElement('div');
+    const messageDiv = document.createElement("div");
     messageDiv.className = `message ${type}`;
     messageDiv.textContent = message;
-    
+
     document.body.appendChild(messageDiv);
-    
+
     setTimeout(() => {
-        messageDiv.classList.add('show');
+        messageDiv.classList.add("show");
     }, 10);
-    
+
     setTimeout(() => {
-        messageDiv.classList.remove('show');
+        messageDiv.classList.remove("show");
         setTimeout(() => {
             document.body.removeChild(messageDiv);
         }, 300);
@@ -714,23 +865,23 @@ function updateUserMenu(username) {
 // Función para verificar token y obtener datos del usuario
 async function verifyTokenAndLoadUser() {
     if (!authToken) return;
-    
+
     try {
         const response = await fetch(`${API_BASE}/verify-token`, {
             headers: {
-                'Authorization': `Bearer ${authToken}`
-            }
+                Authorization: `Bearer ${authToken}`,
+            },
         });
-        
+
         if (response.ok) {
             const data = await response.json();
             updateUserMenu(data.user.username);
             return data.user;
         } else {
             // Token inválido
-            localStorage.removeItem('token');
+            localStorage.removeItem("token");
             authToken = null;
-            window.location.href = 'index.html';
+            window.location.href = "index.html";
         }
     } catch (error) {
         console.log("Error verificando token:", error);

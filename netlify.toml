@@ -1,0 +1,13 @@
+{
+  "build": {
+    "publish": ".",
+    "command": "echo 'Static site ready'"
+  },
+  "redirects": [
+    {
+      "from": "/*",
+      "to": "/index.html",
+      "status": 200
+    }
+  ]
+}

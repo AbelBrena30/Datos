@@ -832,7 +832,7 @@ body {
         grid-template-columns: 1fr;
         gap: 20px;
     }
-    
+
     .parent-edit-section {
         padding: 15px;
     }
@@ -961,23 +961,23 @@ body {
         width: 95%;
         margin: 20px;
     }
-    
+
     .modal-header {
         padding: 20px;
     }
-    
+
     .modal-header h2 {
         font-size: 1.3rem;
     }
-    
+
     .edit-form {
         padding: 20px;
     }
-    
+
     .form-buttons {
         flex-direction: column;
     }
-    
+
     .save-btn,
     .cancel-btn {
         width: 100%;

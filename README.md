@@ -117,31 +117,54 @@ Una aplicación web para gestionar datos personales con autenticación y base de
 
 ## Características
 
-- 🔐 Sistema de autenticación (registro/login)
-- 👤 Gestión de datos personales
-- 👨‍👩‍👧‍👦 Gestión de datos de padres
-- 📱 Responsive design
-- 📞 Copia de números de teléfono con un click
-- 🎨 Interfaz moderna con animaciones
+-   🔐 Sistema de autenticación (registro/login)
+-   👤 Gestión de datos personales
+-   👨‍👩‍👧‍👦 Gestión de datos de padres
+-   📱 Responsive design
+-   📞 Copia de números de teléfono con un click
+-   🎨 Interfaz moderna con animaciones
 
 ## Instalación
 
 1. Clona el repositorio
 2. Instala las dependencias:
-   ```bash
-   npm install
-   ```
+    ```bash
+    npm install
+    ```
 
 ## Uso
+
+### 🌐 Versión en línea (Netlify)
+
+**La forma más fácil de usar la aplicación:**
+
+1. **Deploy en Netlify:**
+
+    - Ve a [netlify.com](https://netlify.com)
+    - Arrastra toda la carpeta del proyecto
+    - ¡Tu app estará en línea en segundos!
+
+2. **Características en Netlify:**
+    - ✅ Funciona sin servidor
+    - ✅ Datos guardados en tu navegador
+    - ✅ Autenticación local
+    - ✅ Edición en tiempo real
+    - ✅ PWA ready
+
+Ver [NETLIFY-DEPLOY.md](NETLIFY-DEPLOY.md) para instrucciones detalladas.
+
+### 💻 Versión local (con servidor)
 
 ### Iniciar el servidor
 
 **Opción 1 - Archivo batch (Windows):**
+
 ```bash
 ./start-server.bat
 ```
 
 **Opción 2 - Comando directo:**
+
 ```bash
 node server.js
 ```
@@ -151,35 +174,39 @@ El servidor estará disponible en: `http://localhost:3000`
 ### Usar la aplicación
 
 1. **Primera vez:**
-   - Abre `index.html` en tu navegador
-   - Registra una nueva cuenta
-   - Completa tus datos personales
-   - ¡Listo para usar!
+
+    - Abre `index.html` en tu navegador
+    - Registra una nueva cuenta
+    - Completa tus datos personales
+    - ¡Listo para usar!
 
 2. **Usuarios existentes:**
-   - Inicia sesión con tu usuario y contraseña
-   - Accede a tu dashboard personal
-   - Edita tus datos cuando lo necesites
+    - Inicia sesión con tu usuario y contraseña
+    - Accede a tu dashboard personal
+    - Edita tus datos cuando lo necesites
 
 ## Funcionalidades
 
 ### Autenticación
-- Registro de nuevos usuarios
-- Inicio de sesión seguro
-- Tokens JWT para sesiones
-- Redirección automática según estado
+
+-   Registro de nuevos usuarios
+-   Inicio de sesión seguro
+-   Tokens JWT para sesiones
+-   Redirección automática según estado
 
 ### Gestión de Datos
-- **Datos Personales**: Nombre, fecha de nacimiento, edad, ocupación, etc.
-- **Datos de Padres**: Información de padre y madre
-- **Edición en tiempo real**: Modal de edición intuitivo
-- **Copia rápida**: Click en números de teléfono para copiar
+
+-   **Datos Personales**: Nombre, fecha de nacimiento, edad, ocupación, etc.
+-   **Datos de Padres**: Información de padre y madre
+-   **Edición en tiempo real**: Modal de edición intuitivo
+-   **Copia rápida**: Click en números de teléfono para copiar
 
 ### Interfaz
-- **Carrusel interactivo**: Navegación entre datos principales
-- **Menú de usuario**: Acceso rápido a opciones
-- **Transiciones suaves**: Animaciones entre secciones
-- **Diseño responsive**: Funciona en móvil y desktop
+
+-   **Carrusel interactivo**: Navegación entre datos principales
+-   **Menú de usuario**: Acceso rápido a opciones
+-   **Transiciones suaves**: Animaciones entre secciones
+-   **Diseño responsive**: Funciona en móvil y desktop
 
 ## Estructura de Archivos
 
@@ -198,11 +225,11 @@ El servidor estará disponible en: `http://localhost:3000`
 
 ## Tecnologías
 
-- **Frontend**: HTML5, CSS3, JavaScript vanilla
-- **Backend**: Node.js, Express.js
-- **Base de datos**: SQLite
-- **Autenticación**: JWT + bcryptjs
-- **Diseño**: CSS Grid, Flexbox, animaciones CSS
+-   **Frontend**: HTML5, CSS3, JavaScript vanilla
+-   **Backend**: Node.js, Express.js
+-   **Base de datos**: SQLite
+-   **Autenticación**: JWT + bcryptjs
+-   **Diseño**: CSS Grid, Flexbox, animaciones CSS
 
 ## Modo Sin Servidor
 

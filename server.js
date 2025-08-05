@@ -325,7 +325,9 @@ app.put("/api/personal-data", authenticateToken, (req, res) => {
             const selectQuery = `SELECT * FROM personal_data WHERE user_id = ?`;
             db.get(selectQuery, [req.user.id], (err, row) => {
                 if (err) {
-                    return res.status(500).json({ error: "Error al obtener datos actualizados" });
+                    return res
+                        .status(500)
+                        .json({ error: "Error al obtener datos actualizados" });
                 }
                 res.json(row || {});
             });
@@ -440,7 +442,9 @@ app.put("/api/parents-data", authenticateToken, (req, res) => {
             const selectQuery = `SELECT * FROM parents_data WHERE user_id = ?`;
             db.get(selectQuery, [req.user.id], (err, row) => {
                 if (err) {
-                    return res.status(500).json({ error: "Error al obtener datos actualizados" });
+                    return res
+                        .status(500)
+                        .json({ error: "Error al obtener datos actualizados" });
                 }
                 res.json(row || {});
             });
