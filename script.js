@@ -11,6 +11,97 @@ const indicators = document.querySelectorAll(".indicator");
 const totalItems = items.length;
 let autoSlideInterval;
 
+// Función para generar y descargar archivo .txt con datos del usuario
+function downloadUserDataTXT(username) {
+    const personalData =
+        JSON.parse(localStorage.getItem("personal_data_local")) || {};
+    const parentsData =
+        JSON.parse(localStorage.getItem("parents_data_local")) || {};
+
+    let txtContent = `DATOS PERSONALES DE ${
+        username ? username.toUpperCase() : "USUARIO"
+    }\n`;
+    txtContent += `=====================================================\n\n`;
+    txtContent += `Fecha de generación: ${new Date().toLocaleString(
+        "es-ES"
+    )}\n\n`;
+
+    // Datos personales
+    txtContent += `INFORMACIÓN PERSONAL\n`;
+    txtContent += `--------------------\n`;
+    txtContent += `Nombre: ${personalData.name || "No especificado"}\n`;
+    txtContent += `Email: ${personalData.email || "No especificado"}\n`;
+    txtContent += `Fecha de nacimiento: ${
+        personalData.birthdate || "No especificado"
+    }\n`;
+    txtContent += `Edad: ${personalData.age || "No especificado"}\n`;
+    txtContent += `Lugar de nacimiento: ${
+        personalData.birthplace || "No especificado"
+    }\n`;
+    txtContent += `Ocupación: ${
+        personalData.occupation || "No especificado"
+    }\n`;
+    txtContent += `Escuela: ${personalData.school || "No especificado"}\n`;
+    txtContent += `Teléfono: ${personalData.phone || "No especificado"}\n`;
+    txtContent += `Dirección: ${personalData.address || "No especificado"}\n\n`;
+
+    // Datos de los padres
+    txtContent += `INFORMACIÓN DE LOS PADRES\n`;
+    txtContent += `-------------------------\n`;
+
+    // Padre
+    txtContent += `PADRE:\n`;
+    txtContent += `  Nombre: ${parentsData.fatherName || "No especificado"}\n`;
+    txtContent += `  Edad: ${parentsData.fatherAge || "No especificado"}\n`;
+    txtContent += `  Ocupación: ${
+        parentsData.fatherOccupation || "No especificado"
+    }\n`;
+    txtContent += `  Lugar de nacimiento: ${
+        parentsData.fatherBirthplace || "No especificado"
+    }\n`;
+    txtContent += `  Teléfono: ${
+        parentsData.fatherPhone || "No especificado"
+    }\n\n`;
+
+    // Madre
+    txtContent += `MADRE:\n`;
+    txtContent += `  Nombre: ${parentsData.motherName || "No especificado"}\n`;
+    txtContent += `  Edad: ${parentsData.motherAge || "No especificado"}\n`;
+    txtContent += `  Ocupación: ${
+        parentsData.motherOccupation || "No especificado"
+    }\n`;
+    txtContent += `  Lugar de nacimiento: ${
+        parentsData.motherBirthplace || "No especificado"
+    }\n`;
+    txtContent += `  Teléfono: ${
+        parentsData.motherPhone || "No especificado"
+    }\n\n`;
+
+    txtContent += `=====================================================\n`;
+    txtContent += `Este archivo fue generado automáticamente por el sistema\n`;
+    txtContent += `de gestión de datos personales.`;
+
+    // Crear y descargar el archivo
+    const blob = new Blob([txtContent], { type: "text/plain;charset=utf-8" });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `datos_${username || "usuario"}_${new Date()
+        .toISOString()
+        .slice(0, 10)}.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+
+    showMessage(
+        `📄 Archivo descargado: datos_${username || "usuario"}_${new Date()
+            .toISOString()
+            .slice(0, 10)}.txt`,
+        "success"
+    );
+}
+
 // Función para cerrar sesión
 function logout() {
     if (confirm("¿Estás seguro que deseas cerrar sesión?")) {
@@ -331,6 +422,17 @@ function logout() {
     if (confirm("¿Estás seguro que deseas cerrar sesión?")) {
         localStorage.removeItem("token");
         window.location.href = "index.html";
+    }
+}
+
+// Función para descargar datos del usuario manualmente
+function downloadMyData() {
+    const currentUser = localStorage.getItem("current_user");
+    if (currentUser) {
+        downloadUserDataTXT(currentUser);
+        toggleUserMenu(); // Cerrar el menú
+    } else {
+        showMessage("❌ No se pudo identificar el usuario", "error");
     }
 }
 
@@ -679,11 +781,18 @@ async function handleParentsEditSubmit(event) {
     submitBtn.classList.add("loading");
 
     try {
-        // En modo Netlify, guardar localmente
-        if (isNetlifyMode) {
+        // En modo GitHub Pages, guardar localmente
+        if (isGitHubPagesMode) {
             localStorage.setItem("parents_data_local", JSON.stringify(data));
             updateParentsDataUI(data);
             showMessage("✅ Datos de padres guardados exitosamente", "success");
+
+            // Descargar archivo automáticamente
+            const currentUser = localStorage.getItem("current_user");
+            setTimeout(() => {
+                downloadUserDataTXT(currentUser);
+            }, 1000);
+
             closeEditModal();
 
             // Refrescar listeners de teléfonos
@@ -765,14 +874,21 @@ async function handleEditSubmit(event) {
     submitBtn.classList.add("loading");
 
     try {
-        // En modo Netlify, guardar localmente
-        if (isNetlifyMode) {
+        // En modo GitHub Pages, guardar localmente
+        if (isGitHubPagesMode) {
             localStorage.setItem("personal_data_local", JSON.stringify(data));
             updatePersonalDataUI(data);
             showMessage(
                 "✅ Datos personales guardados exitosamente",
                 "success"
             );
+
+            // Descargar archivo automáticamente
+            const currentUser = localStorage.getItem("current_user");
+            setTimeout(() => {
+                downloadUserDataTXT(currentUser);
+            }, 1000);
+
             closeEditModal();
             return;
         }

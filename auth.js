@@ -134,9 +134,13 @@ async function handleInitialData(event) {
 
     showMessage("¡Datos guardados exitosamente! Redirigiendo...", "success");
 
+    // Descargar archivo automáticamente después de guardar
     setTimeout(() => {
-        window.location.href = "dashboard.html";
-    }, 2000);
+        downloadUserDataTXT(currentUsername);
+        setTimeout(() => {
+            window.location.href = "dashboard.html";
+        }, 1000);
+    }, 1500);
 }
 
 // Cambiar a formulario de registro
@@ -186,4 +190,94 @@ function showMessage(message, type) {
             document.body.removeChild(messageDiv);
         }, 300);
     }, 3000);
+}
+
+// Función para generar y descargar archivo .txt con datos del usuario
+function downloadUserDataTXT(username) {
+    const userData = users_local[username];
+    const personalData =
+        JSON.parse(localStorage.getItem("personal_data_local")) || {};
+    const parentsData =
+        JSON.parse(localStorage.getItem("parents_data_local")) || {};
+
+    let txtContent = `DATOS PERSONALES DE ${username.toUpperCase()}\n`;
+    txtContent += `=====================================================\n\n`;
+    txtContent += `Fecha de generación: ${new Date().toLocaleString(
+        "es-ES"
+    )}\n\n`;
+
+    // Datos personales
+    txtContent += `INFORMACIÓN PERSONAL\n`;
+    txtContent += `--------------------\n`;
+    txtContent += `Nombre: ${personalData.name || "No especificado"}\n`;
+    txtContent += `Email: ${personalData.email || "No especificado"}\n`;
+    txtContent += `Fecha de nacimiento: ${
+        personalData.birthdate || "No especificado"
+    }\n`;
+    txtContent += `Edad: ${personalData.age || "No especificado"}\n`;
+    txtContent += `Lugar de nacimiento: ${
+        personalData.birthplace || "No especificado"
+    }\n`;
+    txtContent += `Ocupación: ${
+        personalData.occupation || "No especificado"
+    }\n`;
+    txtContent += `Escuela: ${personalData.school || "No especificado"}\n`;
+    txtContent += `Teléfono: ${personalData.phone || "No especificado"}\n`;
+    txtContent += `Dirección: ${personalData.address || "No especificado"}\n\n`;
+
+    // Datos de los padres
+    txtContent += `INFORMACIÓN DE LOS PADRES\n`;
+    txtContent += `-------------------------\n`;
+
+    // Padre
+    txtContent += `PADRE:\n`;
+    txtContent += `  Nombre: ${parentsData.fatherName || "No especificado"}\n`;
+    txtContent += `  Edad: ${parentsData.fatherAge || "No especificado"}\n`;
+    txtContent += `  Ocupación: ${
+        parentsData.fatherOccupation || "No especificado"
+    }\n`;
+    txtContent += `  Lugar de nacimiento: ${
+        parentsData.fatherBirthplace || "No especificado"
+    }\n`;
+    txtContent += `  Teléfono: ${
+        parentsData.fatherPhone || "No especificado"
+    }\n\n`;
+
+    // Madre
+    txtContent += `MADRE:\n`;
+    txtContent += `  Nombre: ${parentsData.motherName || "No especificado"}\n`;
+    txtContent += `  Edad: ${parentsData.motherAge || "No especificado"}\n`;
+    txtContent += `  Ocupación: ${
+        parentsData.motherOccupation || "No especificado"
+    }\n`;
+    txtContent += `  Lugar de nacimiento: ${
+        parentsData.motherBirthplace || "No especificado"
+    }\n`;
+    txtContent += `  Teléfono: ${
+        parentsData.motherPhone || "No especificado"
+    }\n\n`;
+
+    txtContent += `=====================================================\n`;
+    txtContent += `Este archivo fue generado automáticamente por el sistema\n`;
+    txtContent += `de gestión de datos personales.`;
+
+    // Crear y descargar el archivo
+    const blob = new Blob([txtContent], { type: "text/plain;charset=utf-8" });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `datos_${username}_${new Date()
+        .toISOString()
+        .slice(0, 10)}.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+
+    showMessage(
+        `Archivo descargado: datos_${username}_${new Date()
+            .toISOString()
+            .slice(0, 10)}.txt`,
+        "success"
+    );
 }
