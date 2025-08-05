@@ -27,6 +27,7 @@
                             <input
                                 type="text"
                                 id="loginUsername"
+                                name="username"
                                 required
                                 placeholder="Ingresa tu usuario"
                             />
@@ -36,6 +37,7 @@
                             <input
                                 type="password"
                                 id="loginPassword"
+                                name="password"
                                 required
                                 placeholder="Ingresa tu contraseña"
                             />
@@ -46,95 +48,8 @@
                     </form>
                     <p class="auth-switch">
                         ¿No tienes cuenta?
-                        <a href="#" onclick="showRegisterForm()">Regístrate</a>
+                        <a href="register.html">Regístrate</a>
                     </p>
-                </div>
-
-                <!-- Formulario de Registro -->
-                <div id="registerForm" class="auth-form" style="display: none">
-                    <h2>Crear Cuenta</h2>
-                    <form onsubmit="handleRegister(event)">
-                        <div class="form-group">
-                            <label for="registerUsername">Usuario:</label>
-                            <input
-                                type="text"
-                                id="registerUsername"
-                                required
-                                placeholder="Elige un nombre de usuario"
-                            />
-                        </div>
-                        <div class="form-group">
-                            <label for="registerPassword">Contraseña:</label>
-                            <input
-                                type="password"
-                                id="registerPassword"
-                                required
-                                placeholder="Crea una contraseña"
-                            />
-                        </div>
-                        <div class="form-group">
-                            <label for="confirmPassword">Confirmar Contraseña:</label>
-                            <input
-                                type="password"
-                                id="confirmPassword"
-                                required
-                                placeholder="Confirma tu contraseña"
-                            />
-                        </div>
-                        <button type="submit" class="auth-btn">
-                            Crear Cuenta
-                        </button>
-                    </form>
-                    <p class="auth-switch">
-                        ¿Ya tienes cuenta?
-                        <a href="#" onclick="showLoginForm()">Inicia sesión</a>
-                    </p>
-                </div>
-
-                <!-- Formulario de Datos Iniciales -->
-                <div id="initialDataForm" class="auth-form" style="display: none">
-                    <h2>Completa tus Datos</h2>
-                    <p>Para comenzar, completa tu información básica:</p>
-                    <form onsubmit="handleInitialData(event)">
-                        <div class="form-group">
-                            <label for="initialName">Nombre Completo:</label>
-                            <input
-                                type="text"
-                                id="initialName"
-                                required
-                                placeholder="Tu nombre completo"
-                            />
-                        </div>
-                        <div class="form-group">
-                            <label for="initialBirthdate">Fecha de Nacimiento:</label>
-                            <input
-                                type="date"
-                                id="initialBirthdate"
-                                required
-                            />
-                        </div>
-                        <div class="form-group">
-                            <label for="initialPhone">Número de Teléfono:</label>
-                            <input
-                                type="tel"
-                                id="initialPhone"
-                                required
-                                placeholder="Tu número de teléfono"
-                            />
-                        </div>
-                        <div class="form-group">
-                            <label for="initialEmail">Email:</label>
-                            <input
-                                type="email"
-                                id="initialEmail"
-                                required
-                                placeholder="tu@email.com"
-                            />
-                        </div>
-                        <button type="submit" class="auth-btn">
-                            Guardar y Continuar
-                        </button>
-                    </form>
                 </div>
             </div>
         </div>

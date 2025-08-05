@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Iniciar Sesión - Datos Personales</title>
+        <title>Registro - Datos Personales</title>
         <link rel="stylesheet" href="style.css" />
         <link
             href="https://fonts.googleapis.com/css?family=Montserrat:100,200,300,regular,500,600,700,800,900"
@@ -14,53 +14,32 @@
         <div class="auth-container">
             <div class="auth-card">
                 <div class="auth-header">
-                    <h1>Datos Personales</h1>
-                    <p>Gestiona tu información personal de forma segura</p>
-                </div>
-
-                <!-- Formulario de Login -->
-                <div id="loginForm" class="auth-form">
-                    <h2>Iniciar Sesión</h2>
-                    <form onsubmit="handleLogin(event)">
-                        <div class="form-group">
-                            <label for="loginUsername">Usuario:</label>
-                            <input
-                                type="text"
-                                id="loginUsername"
-                                required
-                                placeholder="Ingresa tu usuario"
-                            />
-                        </div>
-                        <div class="form-group">
-                            <label for="loginPassword">Contraseña:</label>
-                            <input
-                                type="password"
-                                id="loginPassword"
-                                required
-                                placeholder="Ingresa tu contraseña"
-                            />
-                        </div>
-                        <button type="submit" class="auth-btn">
-                            Iniciar Sesión
-                        </button>
-                    </form>
-                    <p class="auth-switch">
-                        ¿No tienes cuenta?
-                        <a href="#" onclick="showRegisterForm()">Regístrate</a>
-                    </p>
+                    <h1>Crear Cuenta</h1>
+                    <p>Regístrate para gestionar tus datos personales</p>
                 </div>
 
                 <!-- Formulario de Registro -->
-                <div id="registerForm" class="auth-form" style="display: none">
-                    <h2>Crear Cuenta</h2>
+                <div id="registerForm" class="auth-form">
+                    <h2>Registro de Usuario</h2>
                     <form onsubmit="handleRegister(event)">
                         <div class="form-group">
                             <label for="registerUsername">Usuario:</label>
                             <input
                                 type="text"
                                 id="registerUsername"
+                                name="username"
                                 required
                                 placeholder="Elige un nombre de usuario"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="registerEmail">Email:</label>
+                            <input
+                                type="email"
+                                id="registerEmail"
+                                name="email"
+                                required
+                                placeholder="tu@email.com"
                             />
                         </div>
                         <div class="form-group">
@@ -68,6 +47,7 @@
                             <input
                                 type="password"
                                 id="registerPassword"
+                                name="password"
                                 required
                                 placeholder="Crea una contraseña"
                             />
@@ -79,6 +59,7 @@
                             <input
                                 type="password"
                                 id="confirmPassword"
+                                name="confirmPassword"
                                 required
                                 placeholder="Confirma tu contraseña"
                             />
@@ -89,7 +70,7 @@
                     </form>
                     <p class="auth-switch">
                         ¿Ya tienes cuenta?
-                        <a href="#" onclick="showLoginForm()">Inicia sesión</a>
+                        <a href="index.html">Inicia sesión</a>
                     </p>
                 </div>
 
@@ -107,6 +88,7 @@
                             <input
                                 type="text"
                                 id="initialName"
+                                name="name"
                                 required
                                 placeholder="Tu nombre completo"
                             />
@@ -115,7 +97,12 @@
                             <label for="initialBirthdate"
                                 >Fecha de Nacimiento:</label
                             >
-                            <input type="date" id="initialBirthdate" required />
+                            <input
+                                type="date"
+                                id="initialBirthdate"
+                                name="birthdate"
+                                required
+                            />
                         </div>
                         <div class="form-group">
                             <label for="initialPhone"
@@ -124,6 +111,7 @@
                             <input
                                 type="tel"
                                 id="initialPhone"
+                                name="phone"
                                 required
                                 placeholder="Tu número de teléfono"
                             />
@@ -133,8 +121,65 @@
                             <input
                                 type="email"
                                 id="initialEmail"
+                                name="email"
                                 required
                                 placeholder="tu@email.com"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="initialAge">Edad:</label>
+                            <input
+                                type="number"
+                                id="initialAge"
+                                name="age"
+                                required
+                                placeholder="Tu edad"
+                                min="1"
+                                max="120"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="initialBirthplace"
+                                >Lugar de Nacimiento:</label
+                            >
+                            <input
+                                type="text"
+                                id="initialBirthplace"
+                                name="birthplace"
+                                required
+                                placeholder="Ciudad, País"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="initialOccupation">Ocupación:</label>
+                            <input
+                                type="text"
+                                id="initialOccupation"
+                                name="occupation"
+                                required
+                                placeholder="Tu ocupación"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="initialSchool"
+                                >Escuela/Institución:</label
+                            >
+                            <input
+                                type="text"
+                                id="initialSchool"
+                                name="school"
+                                required
+                                placeholder="Tu escuela o institución"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="initialAddress">Dirección:</label>
+                            <input
+                                type="text"
+                                id="initialAddress"
+                                name="address"
+                                required
+                                placeholder="Tu dirección completa"
                             />
                         </div>
                         <button type="submit" class="auth-btn">

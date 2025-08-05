@@ -15,17 +15,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Configurar event listeners
 function setupEventListeners() {
-    // Formulario de login
-    document
-        .getElementById("loginForm")
-        .addEventListener("submit", handleLogin);
+    // Formulario de login (solo en index.html)
+    const loginForm = document.getElementById("loginForm");
+    if (loginForm) {
+        loginForm.addEventListener("submit", handleLogin);
+    }
 
-    // Formulario de registro
-    document
-        .getElementById("registerForm")
-        .addEventListener("submit", handleRegister);
+    // Formulario de registro (solo en register.html)
+    const registerForm = document.getElementById("registerForm");
+    if (registerForm) {
+        registerForm.addEventListener("submit", handleRegister);
+    }
 
-    // Formulario de datos iniciales
+    // Formulario de datos iniciales (en register.html)
     const initialForm = document.getElementById("initialDataForm");
     if (initialForm) {
         initialForm.addEventListener("submit", handleInitialData);
@@ -157,8 +159,17 @@ function switchToLogin() {
 
 // Mostrar formulario de datos iniciales
 function showInitialDataForm() {
-    document.querySelector(".auth-card").style.display = "none";
-    document.getElementById("initial-data-form").classList.remove("hidden");
+    // Ocultar formulario de registro
+    const registerForm = document.getElementById("registerForm");
+    if (registerForm) {
+        registerForm.style.display = "none";
+    }
+
+    // Mostrar formulario de datos iniciales
+    const initialForm = document.getElementById("initialDataForm");
+    if (initialForm) {
+        initialForm.style.display = "block";
+    }
 }
 
 // Saltar datos iniciales
