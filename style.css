@@ -52,7 +52,7 @@ body {
     position: relative;
     filter: blur(10px);
     color: white;
-    transform: scale(1.05) translatey(0px);
+    transform: scale(1.1) translatey(0px);
     opacity: 1;
     visibility: visible;
 }
@@ -63,7 +63,7 @@ body {
     filter: none;
     visibility: visible;
     min-height: 100vh;
-    padding-top: 80px;
+    padding-top: 40px;
 }
 
 .section-content {
