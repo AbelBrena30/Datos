@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="style.css" />
+        <link
+            href="https://fonts.googleapis.com/css?family=Montserrat:100,200,300,regular,500,600,700,800,900,100italic,200italic,300italic,italic,500italic,600italic,700italic,800italic,900italic"
+            rel="stylesheet"
+        />
+        <script src="script.js" defer></script>
+        <title>Mis Datos</title>
+    </head>
+    <body>
+        <!-- Menú de usuario -->
+        <div id="user-menu" class="user-menu">
+            <button class="user-menu-btn" onclick="toggleUserMenu()">
+                <span>👤</span>
+            </button>
+            <div class="user-menu-dropdown" id="userMenuDropdown">
+                <div class="user-info">
+                    <span id="currentUser">Usuario</span>
+                </div>
+                <button onclick="editProfile()" class="menu-item">
+                    ✏️ Editar Datos
+                </button>
+                <button onclick="logout()" class="menu-item logout">
+                    🚪 Cerrar Sesión
+                </button>
+            </div>
+        </div>
+
+        <nav id="navbar">
+            <img id="foto" src="asset/perfil.png" alt="Foto de perfil" />
+
+            <div class="carousel-container">
+                <div class="carousel">
+                    <div class="carousel-item active">
+                        <h3>Nombre:</h3>
+                        <h1>Tu Nombre</h1>
+                    </div>
+                    <div class="carousel-item">
+                        <h3>Fecha de nacimiento:</h3>
+                        <h1>Tu Fecha de<br />Nacimiento</h1>
+                    </div>
+                    <div class="carousel-item">
+                        <h3>Numero de telefono:</h3>
+                        <h1 class="phone-number" data-phone="">
+                            Tu Número
+                        </h1>
+                    </div>
+                </div>
+
+                <div class="carousel-nav">
+                    <button class="prev-btn" onclick="previousSlide()">
+                        &#8249;
+                    </button>
+                    <div class="carousel-indicators">
+                        <span
+                            class="indicator active"
+                            onclick="currentSlide(1)"
+                        ></span>
+                        <span
+                            class="indicator"
+                            onclick="currentSlide(2)"
+                        ></span>
+                        <span
+                            class="indicator"
+                            onclick="currentSlide(3)"
+                        ></span>
+                    </div>
+                    <button class="next-btn" onclick="nextSlideManual()">
+                        &#8250;
+                    </button>
+                </div>
+            </div>
+
+            <button class="down-arrow-btn" onclick="toggleSection()">
+                &#8595;
+            </button>
+        </nav>
+
+        <section id="personal-data" class="personal-section">
+            <div class="section-content">
+                <button class="up-arrow-btn" onclick="toggleSection()">
+                    &#8593;
+                </button>
+
+                <button
+                    class="down-arrow-btn-section"
+                    onclick="showParentsSection()"
+                >
+                    &#8595;
+                </button>
+
+                <h2>Datos Personales</h2>
+
+                <div class="data-grid">
+                    <div class="data-item">
+                        <h3>Nombre</h3>
+                        <p>Tu Nombre Completo</p>
+                    </div>
+
+                    <div class="data-item">
+                        <h3>Fecha de nacimiento</h3>
+                        <p>DD/MM/AAAA</p>
+                    </div>
+
+                    <div class="data-item">
+                        <h3>Edad</h3>
+                        <p>Tu edad</p>
+                    </div>
+
+                    <div class="data-item">
+                        <h3>Lugar de nacimiento</h3>
+                        <p>Tu lugar de nacimiento</p>
+                    </div>
+
+                    <div class="data-item">
+                        <h3>Ocupación</h3>
+                        <p>Tu ocupación</p>
+                    </div>
+
+                    <div class="data-item">
+                        <h3>Escuela</h3>
+                        <p>Tu escuela o institución</p>
+                    </div>
+
+                    <div class="data-item">
+                        <h3>Email</h3>
+                        <p>tu@email.com</p>
+                    </div>
+
+                    <div class="data-item">
+                        <h3>Numero</h3>
+                        <p class="phone-number" data-phone="">
+                            Tu número de teléfono
+                        </p>
+                    </div>
+
+                    <div class="data-item">
+                        <h3>Dirección</h3>
+                        <p>Tu dirección completa</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="parents-data" class="personal-section">
+            <div class="section-content">
+                <button class="up-arrow-btn" onclick="toggleParentsSection()">
+                    &#8593;
+                </button>
+
+                <h2>Datos de mis Padres</h2>
+
+                <div class="parents-container">
+                    <div class="parent-section">
+                        <h3 class="parent-title">Padre</h3>
+                        <div class="data-grid">
+                            <div class="data-item">
+                                <h3>Nombre</h3>
+                                <p>Nombre del padre</p>
+                            </div>
+
+                            <div class="data-item">
+                                <h3>Edad</h3>
+                                <p>Edad</p>
+                            </div>
+
+                            <div class="data-item">
+                                <h3>Ocupación</h3>
+                                <p>Ocupación</p>
+                            </div>
+
+                            <div class="data-item">
+                                <h3>Lugar de nacimiento</h3>
+                                <p>Lugar de nacimiento</p>
+                            </div>
+
+                            <div class="data-item">
+                                <h3>Numero</h3>
+                                <p
+                                    class="phone-number"
+                                    data-phone=""
+                                >
+                                    Número de teléfono
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="parent-section">
+                        <h3 class="parent-title">Madre</h3>
+                        <div class="data-grid">
+                            <div class="data-item">
+                                <h3>Nombre</h3>
+                                <p>Nombre de la madre</p>
+                            </div>
+
+                            <div class="data-item">
+                                <h3>Edad</h3>
+                                <p>Edad</p>
+                            </div>
+
+                            <div class="data-item">
+                                <h3>Ocupación</h3>
+                                <p>Ocupación</p>
+                            </div>
+
+                            <div class="data-item">
+                                <h3>Lugar de nacimiento</h3>
+                                <p>Lugar de nacimiento</p>
+                            </div>
+
+                            <div class="data-item">
+                                <h3>Numero</h3>
+                                <p
+                                    class="phone-number"
+                                    data-phone=""
+                                >
+                                    Número de teléfono
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </body>
+</html>

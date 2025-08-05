@@ -276,6 +276,63 @@ app.post("/api/personal-data", authenticateToken, (req, res) => {
     );
 });
 
+// Actualizar datos personales existentes (PUT)
+app.put("/api/personal-data", authenticateToken, (req, res) => {
+    const {
+        nombre,
+        fecha_nacimiento,
+        edad,
+        lugar_nacimiento,
+        ocupacion,
+        escuela,
+        email,
+        numero,
+        direccion,
+    } = req.body;
+
+    const query = `INSERT OR REPLACE INTO personal_data 
+        (user_id, nombre, fecha_nacimiento, edad, lugar_nacimiento, ocupacion, escuela, email, numero, direccion, updated_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)`;
+
+    db.run(
+        query,
+        [
+            req.user.id,
+            nombre,
+            fecha_nacimiento,
+            edad,
+            lugar_nacimiento,
+            ocupacion,
+            escuela,
+            email,
+            numero,
+            direccion,
+        ],
+        function (err) {
+            if (err) {
+                console.error("Error al actualizar datos:", err);
+                return res
+                    .status(500)
+                    .json({ error: "Error al actualizar datos" });
+            }
+
+            // Actualizar flag de datos personales
+            db.run("UPDATE users SET has_personal_data = TRUE WHERE id = ?", [
+                req.user.id,
+            ]);
+
+            // Devolver los datos actualizados
+            const selectQuery = `SELECT * FROM personal_data WHERE user_id = ?`;
+            db.get(selectQuery, [req.user.id], (err, row) => {
+                if (err) {
+                    return res.status(500).json({ error: "Error al obtener datos actualizados" });
+                }
+                res.json(row || {});
+            });
+        }
+    );
+});
+
 // Rutas para datos de padres
 app.get("/api/parents-data", authenticateToken, (req, res) => {
     db.get(
@@ -332,6 +389,61 @@ app.post("/api/parents-data", authenticateToken, (req, res) => {
             }
 
             res.json({ message: "Datos de padres guardados correctamente" });
+        }
+    );
+});
+
+// Actualizar datos de padres existentes (PUT)
+app.put("/api/parents-data", authenticateToken, (req, res) => {
+    const {
+        padre_nombre,
+        padre_edad,
+        padre_ocupacion,
+        padre_lugar_nacimiento,
+        padre_numero,
+        madre_nombre,
+        madre_edad,
+        madre_ocupacion,
+        madre_lugar_nacimiento,
+        madre_numero,
+    } = req.body;
+
+    const query = `INSERT OR REPLACE INTO parents_data 
+        (user_id, padre_nombre, padre_edad, padre_ocupacion, padre_lugar_nacimiento, padre_numero,
+         madre_nombre, madre_edad, madre_ocupacion, madre_lugar_nacimiento, madre_numero, updated_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)`;
+
+    db.run(
+        query,
+        [
+            req.user.id,
+            padre_nombre,
+            padre_edad,
+            padre_ocupacion,
+            padre_lugar_nacimiento,
+            padre_numero,
+            madre_nombre,
+            madre_edad,
+            madre_ocupacion,
+            madre_lugar_nacimiento,
+            madre_numero,
+        ],
+        function (err) {
+            if (err) {
+                console.error("Error al actualizar datos de padres:", err);
+                return res
+                    .status(500)
+                    .json({ error: "Error al actualizar datos de padres" });
+            }
+
+            // Devolver los datos actualizados
+            const selectQuery = `SELECT * FROM parents_data WHERE user_id = ?`;
+            db.get(selectQuery, [req.user.id], (err, row) => {
+                if (err) {
+                    return res.status(500).json({ error: "Error al obtener datos actualizados" });
+                }
+                res.json(row || {});
+            });
         }
     );
 });

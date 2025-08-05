@@ -111,7 +111,115 @@ El sistema utiliza **SQLite** con las siguientes tablas:
 -   `POST /api/login` - Iniciar sesión
 -   `GET /api/verify-token` - Verificar token
 
-### Datos
+### Aplicación de Datos Personales
+
+Una aplicación web para gestionar datos personales con autenticación y base de datos.
+
+## Características
+
+- 🔐 Sistema de autenticación (registro/login)
+- 👤 Gestión de datos personales
+- 👨‍👩‍👧‍👦 Gestión de datos de padres
+- 📱 Responsive design
+- 📞 Copia de números de teléfono con un click
+- 🎨 Interfaz moderna con animaciones
+
+## Instalación
+
+1. Clona el repositorio
+2. Instala las dependencias:
+   ```bash
+   npm install
+   ```
+
+## Uso
+
+### Iniciar el servidor
+
+**Opción 1 - Archivo batch (Windows):**
+```bash
+./start-server.bat
+```
+
+**Opción 2 - Comando directo:**
+```bash
+node server.js
+```
+
+El servidor estará disponible en: `http://localhost:3000`
+
+### Usar la aplicación
+
+1. **Primera vez:**
+   - Abre `index.html` en tu navegador
+   - Registra una nueva cuenta
+   - Completa tus datos personales
+   - ¡Listo para usar!
+
+2. **Usuarios existentes:**
+   - Inicia sesión con tu usuario y contraseña
+   - Accede a tu dashboard personal
+   - Edita tus datos cuando lo necesites
+
+## Funcionalidades
+
+### Autenticación
+- Registro de nuevos usuarios
+- Inicio de sesión seguro
+- Tokens JWT para sesiones
+- Redirección automática según estado
+
+### Gestión de Datos
+- **Datos Personales**: Nombre, fecha de nacimiento, edad, ocupación, etc.
+- **Datos de Padres**: Información de padre y madre
+- **Edición en tiempo real**: Modal de edición intuitivo
+- **Copia rápida**: Click en números de teléfono para copiar
+
+### Interfaz
+- **Carrusel interactivo**: Navegación entre datos principales
+- **Menú de usuario**: Acceso rápido a opciones
+- **Transiciones suaves**: Animaciones entre secciones
+- **Diseño responsive**: Funciona en móvil y desktop
+
+## Estructura de Archivos
+
+```
+├── index.html          # Página de login/registro
+├── dashboard.html      # Dashboard principal
+├── auth.js            # Lógica de autenticación
+├── script.js          # Lógica principal de la app
+├── login.css          # Estilos para login
+├── style.css          # Estilos principales
+├── server.js          # Servidor Express
+├── package.json       # Dependencias
+├── datos.db           # Base de datos SQLite
+└── start-server.bat   # Script para iniciar servidor
+```
+
+## Tecnologías
+
+- **Frontend**: HTML5, CSS3, JavaScript vanilla
+- **Backend**: Node.js, Express.js
+- **Base de datos**: SQLite
+- **Autenticación**: JWT + bcryptjs
+- **Diseño**: CSS Grid, Flexbox, animaciones CSS
+
+## Modo Sin Servidor
+
+Si no quieres usar autenticación, puedes abrir `dashboard.html` directamente en el navegador para usar la aplicación en modo estático con datos de ejemplo.
+
+## Desarrollo
+
+Para contribuir al proyecto:
+
+1. Fork el repositorio
+2. Crea una rama para tu feature
+3. Haz tus cambios
+4. Envía un pull request
+
+## Licencia
+
+MIT License
 
 -   `GET /api/personal-data` - Obtener datos personales
 -   `POST /api/personal-data` - Guardar datos personales

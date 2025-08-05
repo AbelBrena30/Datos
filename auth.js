@@ -50,7 +50,7 @@ async function verifyToken() {
 
             if (data.hasPersonalData) {
                 // Usuario tiene datos, redirigir a la app
-                window.location.href = "/app";
+                window.location.href = "dashboard.html";
             } else {
                 // Usuario nuevo, mostrar formulario de datos iniciales
                 showInitialDataForm();
@@ -104,7 +104,7 @@ async function handleLogin(e) {
 
             setTimeout(() => {
                 if (data.hasPersonalData) {
-                    window.location.href = "/app";
+                    window.location.href = "dashboard.html";
                 } else {
                     showInitialDataForm();
                 }
@@ -266,7 +266,7 @@ async function handleInitialData(e) {
         );
 
         setTimeout(() => {
-            window.location.href = "/app";
+            window.location.href = "dashboard.html";
         }, 2000);
     } catch (error) {
         showMessage("Error al guardar los datos. Intenta nuevamente.", "error");
@@ -283,7 +283,7 @@ function skipInitialData() {
             "¿Estás seguro? Podrás completar tus datos más tarde en la configuración."
         )
     ) {
-        window.location.href = "/app";
+        window.location.href = "dashboard.html";
     }
 }
 
